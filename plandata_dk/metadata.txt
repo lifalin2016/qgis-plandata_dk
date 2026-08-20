@@ -3,7 +3,7 @@ name=Plandata DK
 qgisMinimumVersion=3.16
 description=Adds a "Plandata DK" menu of WFS layers from the Danish Plandata.dk GeoServer, grouped into submenus, for one-click adding to the map.
 version=1.0.0
-author=LifaDigital (Lars Nielsen) and Claude AI
+author=Lifa Digital (Lars Nielsen) and Claude AI
 email=lars.nielsen@lifadigital.dk
 
 about=Plandata DK adds a "Plandata DK" menu to QGIS. It queries the GetCapabilities document of the Plandata.dk WFS service (https://geoserver.plandata.dk/geoserver/wfs) and builds a menu of submenus, one per layer group. Groups are formed from the first three dash/underscore separated parts of each layer's (unprefixed) name; that group name is also used as the submenu title. Selecting a leaf menu item adds the corresponding WFS layer to the current map using EPSG:25832 (ETRS89 / UTM zone 32N). The layer list is fetched the first time the menu is opened, and can be re-fetched at any time via the "Refresh layer list" item at the top of the menu.
