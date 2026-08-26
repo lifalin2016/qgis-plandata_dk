@@ -50,9 +50,18 @@ change this, edit the `DEFAULT_SRS` constant near the top of
   (`QgsBlockingNetworkRequest`), so it automatically respects QGIS's
   configured proxy settings.
 - The WFS capabilities XML (untrusted input from a remote server) is
-  parsed with a bundled copy of [`defusedxml`](https://github.com/tiran/defusedxml)
+  parsed with a bundled, trimmed copy of
+  [`defusedxml`](https://github.com/tiran/defusedxml)
   (`plandata_dk/defusedxml/`, PSF-licensed, see the `LICENSE` file in
   that folder) instead of `xml.etree.ElementTree` directly, to avoid
   entity-expansion / XXE style XML attacks. It's vendored as a
-  subpackage so no extra installation step is required.
+  subpackage so no extra installation step is required. Only the
+  `ElementTree` replacement is kept (the parts of upstream defusedxml
+  this plugin doesn't use - minidom/pulldom/sax/expat/xmlrpc/lxml
+  wrappers and the `defuse_stdlib()` helper - were removed). Inside
+  that vendored wrapper, the handful of lines that import the real
+  `xml.etree.ElementTree` names it wraps (that's how it's able to wrap
+  them safely) are marked `# nosec` so security scanners such as
+  bandit recognize them as reviewed, trusted usage rather than
+  unguarded XML parsing.
 - Tested against QGIS 3.16+; requires no extra Python packages.
