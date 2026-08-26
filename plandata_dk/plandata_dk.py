@@ -20,7 +20,8 @@ placed in their own group named after the full local name.
 """
 
 import re
-import xml.etree.ElementTree as ET
+
+from .defusedxml import ElementTree as DefusedET
 
 from qgis.PyQt.QtCore import QUrl
 from qgis.PyQt.QtNetwork import QNetworkRequest
@@ -164,8 +165,15 @@ class PlandataDkPlugin:
     @staticmethod
     def _parse_feature_type_names(xml_bytes):
         """Return every <FeatureType><Name> value in a GetCapabilities
-        document, regardless of the XML namespace prefixes used."""
-        root = ET.fromstring(xml_bytes)
+        document, regardless of the XML namespace prefixes used.
+
+        Parsing uses the vendored ``defusedxml`` package rather than the
+        standard library's ``xml.etree.ElementTree`` directly, since the
+        stdlib parser is vulnerable to entity-expansion and external
+        entity ("XXE") attacks when fed untrusted XML - and a remote WFS
+        server's response is untrusted input.
+        """
+        root = DefusedET.fromstring(xml_bytes)
         names = []
         for elem in root.iter():
             tag = elem.tag.rsplit("}", 1)[-1]

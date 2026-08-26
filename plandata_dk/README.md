@@ -49,4 +49,10 @@ change this, edit the `DEFAULT_SRS` constant near the top of
 - The plugin talks to the WFS service via QGIS's own network stack
   (`QgsBlockingNetworkRequest`), so it automatically respects QGIS's
   configured proxy settings.
+- The WFS capabilities XML (untrusted input from a remote server) is
+  parsed with a bundled copy of [`defusedxml`](https://github.com/tiran/defusedxml)
+  (`plandata_dk/defusedxml/`, PSF-licensed, see the `LICENSE` file in
+  that folder) instead of `xml.etree.ElementTree` directly, to avoid
+  entity-expansion / XXE style XML attacks. It's vendored as a
+  subpackage so no extra installation step is required.
 - Tested against QGIS 3.16+; requires no extra Python packages.
